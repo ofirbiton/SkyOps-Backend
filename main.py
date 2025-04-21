@@ -19,7 +19,6 @@ from flask_cors import CORS
 import numpy as np
 
 from shared import dependencies as dep
-from utils.visualization import get_final_image_plot
 from core.image_loader import load_and_preprocess_image
 from core.skeletonizer import skeletonize_image, remove_deadends, merge_images
 from core.junction_detector import highlight_dense_skeleton_nodes, refine_yellow_nodes
@@ -179,16 +178,16 @@ def create_mission():
         real_path = []
         for (pixel_x, pixel_y) in path_int:
             real_x = X_top_left + pixel_x * ((X_bottom_right - X_top_left) / width)
-            real_y = Y_top_left + pixel_y * ((Y_top_left - Y_bottom_right) / height)
+            real_y = Y_top_left - pixel_y * ((Y_top_left - Y_bottom_right) / height)
             real_path.append({"x": real_x, "y": real_y})
 
         real_takeoff = {
             "x": X_top_left + takeoff_pixel[0] * ((X_bottom_right - X_top_left) / width),
-            "y": Y_top_left + takeoff_pixel[1] * ((Y_top_left - Y_bottom_right) / height)
+            "y": Y_top_left - takeoff_pixel[1] * ((Y_top_left - Y_bottom_right) / height)
         }
         real_landing = {
             "x": X_top_left + landing_pixel[0] * ((X_bottom_right - X_top_left) / width),
-            "y": Y_top_left + landing_pixel[1] * ((Y_top_left - Y_bottom_right) / height)
+            "y": Y_top_left - landing_pixel[1] * ((Y_top_left - Y_bottom_right) / height)
         }
 
         # 13) Draw the computed path (in green) on the final image.
@@ -223,9 +222,6 @@ def create_mission():
             "path": real_path
         }
 
-        fig = get_final_image_plot(final_image)
-        dep.plt.show()
-
         with open(coord_filepath, "w", encoding="utf-8") as f:
             f.write(json.dumps(coords_json, indent=2))
 
@@ -245,102 +241,4 @@ def create_mission():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
-
-
-
-
-
-
-# def main():
-#     file_path = select_image_file()
-#     if  file_path:
-
-#         # שלב 1: טעינה וסינון
-#         original_image, binary_image = load_and_preprocess_image(file_path)
-
-#         # שלב 2: שלד
-#         skeleton_image = skeletonize_image(binary_image)
-
-#         # שלב 3: הסרת קצוות מתים
-#         refined_skeleton = remove_deadends(skeleton_image)
-
-#         # שלב 4: מיזוג מבנים ושלד
-#         merged_image = merge_images(binary_image, refined_skeleton)
-
-#         # שלב 5: הדגשת צמתים
-#         junctions_highlighted = highlight_dense_skeleton_nodes(merged_image)
-
-#         # שלב 6: טיוב צמתים
-#         refined_junctions = refine_yellow_nodes(junctions_highlighted)
-
-#         # שלב 7: מסכות צבעים
-#         yellow_mask = (refined_junctions[:, :, 0] == 255) & \
-#                     (refined_junctions[:, :, 1] == 255) & \
-#                     (refined_junctions[:, :, 2] == 0)
-#         skeleton_mask = (merged_image[:, :, 0] == 0) & \
-#                         (merged_image[:, :, 1] == 0) & \
-#                         (merged_image[:, :, 2] == 255)
-
-#         # שלב 8: בניית גרף קשרים
-#         final_image, node_list, adjacency_dict = connect_yellow_junctions(
-#             merged_image,
-#             yellow_mask,
-#             skeleton_mask
-#         )
-
-#         print("\nNode list (x, y):")
-#         for node in node_list:
-#             print(node)
-
-#         # שלב 9: קלט מהמשתמש למסלול
-#         if node_list:
-#             try:
-#                 start_input = input("\nהקלד קואורדינטות התחלה בפורמט 'x y': ")
-#                 x1, y1 = map(int, start_input.split())
-#                 start_node = (x1, y1)
-
-#                 end_input = input("הקלד קואורדינטות סוף בפורמט 'x y': ")
-#                 x2, y2 = map(int, end_input.split())
-#                 end_node = (x2, y2)
-
-#                 if start_node not in adjacency_dict:
-#                     print(f"\nהצומת {start_node} לא נמצאת ברשימת הצמתים.")
-#                 elif end_node not in adjacency_dict:
-#                     print(f"\nהצומת {end_node} לא נמצאת ברשימת הצמתים.")
-#                 else:
-#                     path = dijkstra(start_node, end_node, adjacency_dict)
-
-#                     if path is None:
-#                         print("\nלא נמצא מסלול בין הצמתים שנבחרו.")
-#                     else:
-#                         print("\nמסלול קצר ביותר:")
-#                         for p in path:
-#                             print(p)
-
-#                         # ציור המסלול בירוק
-#                         for i in range(len(path) - 1):
-#                             x1, y1 = path[i]
-#                             x2, y2 = path[i + 1]
-#                             dep.cv2.line(final_image, (x1, y1), (x2, y2), (0, 255, 0), 3)
-#             except ValueError:
-#                 print("פורמט קלט לא תקין. נסה שוב.")
-
-#         # שלב 10: תצוגת כל השלבים
-#         # Define or import the display_images function to avoid errors
     
-#         display_images(
-#             original_image,
-#             binary_image,
-#             skeleton_image,
-#             refined_skeleton,
-#             merged_image,
-#             junctions_highlighted,
-#             refined_junctions,
-#             final_image
-#         )
-
-# if __name__ == "__main__":
-#     main()
