@@ -229,9 +229,9 @@ def create_mission():
         return jsonify({
             "message": "Mission created successfully (data processed and functions executed correctly)",
             "success": True,
-            "routeImageUrl": f"/static/outputs/{output_graph_filename}",
-            "satelliteImageUrl": f"/static/outputs/{output_satellite_filename}",
-            "coordinatesFileUrl": f"/static/outputs/{coord_filename}"
+            "routeImageUrl": url_for('static', filename=f"outputs/{output_graph_filename}", _external=True),
+            "satelliteImageUrl": url_for('static', filename=f"outputs/{output_satellite_filename}", _external=True),
+            "coordinatesFileUrl": url_for('static', filename=f"outputs/{coord_filename}", _external=True)
         }), 200
     
 
