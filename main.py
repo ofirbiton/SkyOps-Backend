@@ -17,7 +17,7 @@ from flask_cors import CORS
 from routes import register_routes
 
 app = Flask(__name__)
-CORS(app, origins=["https://www.skyops.co.il"])
+CORS(app, supports_credentials=True)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
