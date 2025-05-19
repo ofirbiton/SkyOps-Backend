@@ -6,7 +6,7 @@ from shared import dependencies as dep
 GREEN = (0, 255, 0)
 
 # כתובת מלאה של השרת ב-Railway (קבוע קונסטנטי)
-SERVER_URL = "https://skyops-backend-production-9e7d.up.railway.app"
+SERVER_URL = "https://skyops-backend-production-0228.up.railway.app"
 
 OUTPUT_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'static', 'outputs')
 
