@@ -4,7 +4,7 @@ from flask import jsonify
 from shared import dependencies as dep
 
 GREEN = (0, 255, 0)
-
+SERVER_URL = "https://skyops-backend-production-9e7d.up.railway.app"
 OUTPUT_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'static', 'outputs')
 
 def generate_and_respond_path(path_int, original_image, satellite_path,
@@ -43,9 +43,9 @@ def generate_and_respond_path(path_int, original_image, satellite_path,
     return jsonify({
         "message": "Mission created successfully (path processed)",
         "success": True,
-        "routeImageUrl": f"/static/outputs/{output_graph_filename}",
-        "satelliteImageUrl": f"/static/outputs/{output_satellite_filename}",
-        "coordinatesFileUrl": f"/static/outputs/{coord_filename}"
+        "routeImageUrl": f"{SERVER_URL}/static/outputs/{output_graph_filename}",
+        "satelliteImageUrl": f"{SERVER_URL}/static/outputs/{output_satellite_filename}",
+        "coordinatesFileUrl": f"{SERVER_URL}/static/outputs/{coord_filename}"
     }), 200
 
 def handle_direct_route(takeoff_pixel, landing_pixel, building_mask, satellite_path, X_top_left, Y_top_left, X_bottom_right, Y_bottom_right, original_image):
