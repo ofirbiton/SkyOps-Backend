@@ -54,6 +54,10 @@ def generate_and_respond_path(path_int, original_image, satellite_path,
     coords_json = {"path": real_path}
     with open(coord_filepath, "w", encoding="utf-8") as f:
         f.write(json.dumps(coords_json, indent=2))
+    print("🛰️ Final URLs:")
+    print(" → routeImageUrl:", f"{SERVER_URL}/static/outputs/{output_graph_filename}")
+    print(" → satelliteImageUrl:", f"{SERVER_URL}/static/outputs/{output_satellite_filename}")
+    print(" → coordinatesFileUrl:", f"{SERVER_URL}/static/outputs/{coord_filename}")
 
     # שליחה ל-Frontend עם כתובות מלאות
     return jsonify({
