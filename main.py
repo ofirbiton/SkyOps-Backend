@@ -12,9 +12,9 @@ path on both the buildings and satellite images.
 """
 
 import os
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
-from routes import register_routes
+from services import mission_service
 
 app = Flask(__name__)
 CORS(app)
@@ -26,14 +26,14 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+@app.route("/api/create-mission", methods=["POST"])
+def create_mission_route():
+    return mission_service.create_mission(request)
+
 # Color constants
 GREEN = (0, 255, 0)
 RED = (0, 0, 255)
 
-register_routes(app)
-
 # Section: Run the Flask application
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
-
-
+    app.run(debug=True)
