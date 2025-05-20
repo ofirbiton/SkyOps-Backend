@@ -17,9 +17,7 @@ from flask_cors import CORS
 from services import mission_service
 
 app = Flask(__name__)
-
-# Enable CORS on all routes (including /api and /static)
-CORS(app, resources={ r"/*": {"origins": "*"} }, supports_credentials=True)
+CORS(app)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
@@ -32,19 +30,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def create_mission_route():
     return mission_service.create_mission(request)
 
-
-@app.route("/ping")
-def ping():
-    return {"pong": True}, 200
-
-
-# Color constants (used inside mission_service)
+# Color constants
 GREEN = (0, 255, 0)
 RED = (0, 0, 255)
 
 # Section: Run the Flask application
 if __name__ == "__main__":
-    # Use the PORT environment variable set by Railway (or default to 5000)
-    port = int(os.environ.get("PORT", 5000))
-    # Listen on all interfaces so Railway's proxy can reach us
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(debug=True)
