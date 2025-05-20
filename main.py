@@ -17,7 +17,7 @@ from flask_cors import CORS
 from routes import register_routes
 
 app = Flask(__name__)
-CORS(app, resources={ r"/*": {"origins": "*"} }, supports_credentials=True)
+CORS(app)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
@@ -34,6 +34,6 @@ register_routes(app)
 
 # Section: Run the Flask application
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=True)
 
 
