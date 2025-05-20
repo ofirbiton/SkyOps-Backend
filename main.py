@@ -32,6 +32,12 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def create_mission_route():
     return mission_service.create_mission(request)
 
+
+@app.route("/ping")
+def ping():
+    return {"pong": True}, 200
+
+
 # Color constants (used inside mission_service)
 GREEN = (0, 255, 0)
 RED = (0, 0, 255)
